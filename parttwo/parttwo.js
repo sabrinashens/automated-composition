@@ -13,24 +13,13 @@ generateButton.addEventListener('click', function () {
     finalSequence = [];
 	startTime = 0;
     for (let i = 0; i < numMaps; i++) {
-       generateSequence(randomOperation(normalForm));
+       randomOperation(normalForm);
     }
     for (let i = 0; i < sequence.length; i++) {
         finalSequence += sequence[i].pitch.toString() + " ";
     }
     document.getElementById('sequence').innerHTML = finalSequence;
 });
-
-function generateSequence(noteList){
-    for (let i = 0; i < noteList.length; i++) {
-        sequence.push({
-            pitch: noteList[i],
-            startTime: startTime,
-            endTime: startTime + noteList[i] * 0.01 - 0.5
-        });
-        startTime += noteList[i] * 0.01 - 0.5; 
-    }
-}
 
 function transpose(noteList) {
     var transposedList = [];
@@ -84,7 +73,18 @@ function randomOperation(pitchSet){
     for (let i = 0; i < pitchSet.length; i++) {
         mappedPitchSet.push(pitchSet[i] + pitchAd);
     }
-    return mappedPitchSet;   
+    generateSequence(mappedPitchSet);
+}
+
+function generateSequence(mappedPitchSet){
+    for (let i = 0; i < mappedPitchSet.length; i++) {
+        sequence.push({
+            pitch: mappedPitchSet[i],
+            startTime: startTime,
+            endTime: startTime + mappedPitchSet[i] * 0.01 - 0.5
+        });
+        startTime += mappedPitchSet[i] * 0.01 - 0.5; 
+    }
 }
 
 let wave = 'sine';
