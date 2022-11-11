@@ -2,16 +2,26 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <a href="../index.html">Back</a><br><br>
   </head>
   <body>
+   <form id = "Waveforms">Select a waveform:
+      <input type="radio" id="sine" name="waveform" value="sine" checked>
+      <label for="sine">sine</label>
+      <input type="radio" id="sawtooth" name="waveform" value="sawtooth">
+      <label for="sawtooth">sawtooth</label>    
+      <input type="radio" id="triangle" name="waveform" value="triangle">
+      <label for="triangle">triangle</label>  
+      <input type="radio" id="square" name="waveform" value="square">
+      <label for="square">square</label>  
+   </form><br>
    <label for="normalform">Enter a set class normal form:</label>
    <input type="text" id="normalform">
    <button class="generate" id="generate">Generate</button><br><br>
    
    <label for="sequence">The pitch sequence generated:</label>
-   <l><i id = "sequence"></i></l>
-   <p><button class="play" id="play">Play</button></p>
-
+   <l><i id = "sequence"></i></l><br>
+   <p><button class="play" id="play" style = "background-color:white; padding:3px 100px; cursor: pointer">Play</button></p>
    <script src = "parttwo.js"></script>
   </body>
 

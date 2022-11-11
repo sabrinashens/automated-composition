@@ -1,36 +1,34 @@
 var audioCtx;
 var osc;
 var gainNode;
-var startTime = 0;
+var startTime;
 var endTime;
-
 const generateButton = document.getElementById("generate");
+const playButton = document.getElementById("play");
+
 generateButton.addEventListener('click', function () {
     var numMaps = Math.floor(Math.random() * 5) + 20; 
     var normalForm = document.getElementById('normalform').value.split(" ").map(Number); 
     sequence = [];
     finalSequence = [];
-
+	startTime = 0;
     for (let i = 0; i < numMaps; i++) {
-       var offset = Math.floor(Math.random() * 30) + 50;
-       generateSequence(randomOperation(normalForm, offset), offset);
+       generateSequence(randomOperation(normalForm));
     }
-
     for (let i = 0; i < sequence.length; i++) {
         finalSequence += sequence[i].pitch.toString() + " ";
     }
-
     document.getElementById('sequence').innerHTML = finalSequence;
 });
 
-function generateSequence(noteList, offset){
+function generateSequence(noteList){
     for (let i = 0; i < noteList.length; i++) {
         sequence.push({
             pitch: noteList[i],
             startTime: startTime,
-            endTime: startTime + (noteList[i] + 1 - offset) * 0.05
+            endTime: startTime + noteList[i] * 0.01 - 0.5
         });
-        startTime += (noteList[i] + 1 - offset) * 0.05; 
+        startTime += noteList[i] * 0.01 - 0.5; 
     }
 }
 
@@ -70,8 +68,9 @@ function inversion(noteList) {
     return invertedList;
 }
 
-function randomOperation(pitchSet, offset){
+function randomOperation(pitchSet){
     var mode = Math.floor(Math.random() * 3) + 1;  
+    var pitchAd = Math.floor(Math.random() * 30) + 50;
     if (mode === 1) {
         pitchSet = transpose(pitchSet);
     }
@@ -83,15 +82,23 @@ function randomOperation(pitchSet, offset){
     }
     mappedPitchSet = [];
     for (let i = 0; i < pitchSet.length; i++) {
-        mappedPitchSet.push(pitchSet[i] + offset);
+        mappedPitchSet.push(pitchSet[i] + pitchAd);
     }
     return mappedPitchSet;   
 }
 
-const playButton = document.getElementById("play");
-playButton.addEventListener('click', function () {
+let wave = 'sine';
+var waveform = document.getElementById("Waveforms").waveform;
+for (var i = 0; i < waveform.length; i++) {
+	waveform[i].onclick = function() {
+  	wave = this.value;
+	} 
+}
+
+playButton.addEventListener('click', function () {   
     audioCtx = new (window.AudioContext || window.webkitAudioContext);
     osc = audioCtx.createOscillator();
+    osc.type = wave;
     gainNode = audioCtx.createGain();
     osc.connect(gainNode).connect(audioCtx.destination);
     osc.start();
@@ -106,7 +113,7 @@ function midiToFreq(m) {
 function playNotes(noteList) {
     noteList.forEach(note => {
         playNote(note);
-    });
+    });  
 }
 
 function playNote(note) {
