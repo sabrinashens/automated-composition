@@ -39,6 +39,17 @@ function transpose(noteList) {
 }
 
 function retrograde(noteList) {
+    for (let i = 0; i < noteList.length; i++) {
+        var notePitch = noteList[i];
+        var quotient = ~~(notePitch / 12);
+        if (notePitch >= 12) {
+        	notePitch -= 12*quotient;
+        }
+        else if (notePitch < 0){
+        	notePitch += 12*-quotient;
+        }
+        noteList[i] = notePitch;  
+    }
     return noteList.reverse(); 
 }
 
@@ -78,12 +89,13 @@ function randomOperation(pitchSet){
 
 function generateSequence(mappedPitchSet){
     for (let i = 0; i < mappedPitchSet.length; i++) {
-        sequence.push({
+    	var duration = Math.random() / 2;
+         sequence.push({
             pitch: mappedPitchSet[i],
             startTime: startTime,
-            endTime: startTime + mappedPitchSet[i] * 0.01 - 0.5
+            endTime: startTime + duration
         });
-        startTime += mappedPitchSet[i] * 0.01 - 0.5; 
+        startTime += duration;   
     }
 }
 
